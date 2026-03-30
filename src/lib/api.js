@@ -245,12 +245,32 @@ export async function fetchVpsAlerts() {
     }
 }
 
+export async function fetchVpsPublicSnapshot(token = '') {
+    try {
+        const query = token ? `?token=${encodeURIComponent(token)}` : '';
+        const data = await api.get(`/api/vps/public${query}`);
+        return { success: true, data };
+    } catch (error) {
+        return handleApiError(error, 'fetchVpsPublicSnapshot');
+    }
+}
+
 export async function fetchVpsNodeDetail(nodeId) {
     try {
         const data = await api.get(`/api/vps/nodes/${nodeId}`);
         return { success: true, data };
     } catch (error) {
         return handleApiError(error, 'fetchVpsNodeDetail');
+    }
+}
+
+export async function fetchVpsPublicNodeDetail(nodeId, token = '') {
+    try {
+        const query = token ? `?token=${encodeURIComponent(token)}` : '';
+        const data = await api.get(`/api/vps/public/nodes/${nodeId}${query}`);
+        return { success: true, data };
+    } catch (error) {
+        return handleApiError(error, 'fetchVpsPublicNodeDetail');
     }
 }
 
@@ -263,12 +283,30 @@ export async function fetchVpsNetworkTargets(nodeId) {
     }
 }
 
+export async function fetchVpsGlobalNetworkTargets() {
+    try {
+        const data = await api.get('/api/vps/network_targets?nodeId=global');
+        return { success: true, data };
+    } catch (error) {
+        return handleApiError(error, 'fetchVpsGlobalNetworkTargets');
+    }
+}
+
 export async function createVpsNetworkTarget(nodeId, payload) {
     try {
         const data = await api.post('/api/vps/network_targets?nodeId=' + encodeURIComponent(nodeId), payload);
         return { success: true, data };
     } catch (error) {
         return handleApiError(error, 'createVpsNetworkTarget');
+    }
+}
+
+export async function createVpsGlobalNetworkTarget(payload) {
+    try {
+        const data = await api.post('/api/vps/network_targets?nodeId=global', payload);
+        return { success: true, data };
+    } catch (error) {
+        return handleApiError(error, 'createVpsGlobalNetworkTarget');
     }
 }
 

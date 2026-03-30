@@ -30,13 +30,20 @@ CREATE TABLE IF NOT EXISTS vps_nodes (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     tag TEXT,
+    group_tag TEXT,
     region TEXT,
+    country_code TEXT,
     description TEXT,
     secret TEXT NOT NULL,
     status TEXT NOT NULL,
     enabled INTEGER DEFAULT 1,
+    use_global_targets INTEGER DEFAULT 0,
+    total_rx INTEGER DEFAULT 0,
+    total_tx INTEGER DEFAULT 0,
+    traffic_limit_gb INTEGER DEFAULT 0,
     last_seen_at DATETIME,
     last_report_json TEXT,
+    overload_state_json TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -66,9 +73,12 @@ CREATE TABLE IF NOT EXISTS vps_network_targets (
     node_id TEXT NOT NULL,
     type TEXT NOT NULL,
     target TEXT NOT NULL,
+    name TEXT,
+    scheme TEXT,
     port INTEGER,
     path TEXT,
     enabled INTEGER DEFAULT 1,
+    force_check_at DATETIME,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

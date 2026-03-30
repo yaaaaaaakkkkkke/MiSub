@@ -224,6 +224,7 @@ export async function onRequest(context) {
                 const isSpaRoute = [
                     '/groups',
                     '/nodes',
+                    '/monitor',
                     '/vps',
                     '/subscriptions',
                     '/settings',
@@ -239,6 +240,7 @@ export async function onRequest(context) {
                     && url.pathname !== '/login'
                     && url.pathname !== customLoginPath
                     && !url.pathname.startsWith('/explore')
+                    && !url.pathname.startsWith('/vps')
                     && url.pathname !== '/offline';
 
                 // Route protection for SPA pages
@@ -263,6 +265,11 @@ export async function onRequest(context) {
                 // [Smart Disguise] Check if we need to disguise the SPA/Root
                 // Only applies to non-static assets
                 if ((url.pathname === '/' || isSpaRoute) && !isStaticAsset) {
+                    if (url.pathname === '/vps') {
+                        // public page should never be disguised
+                        const indexResponse = await fetchSpaEntry(request, env, next);
+                        return applyNoStoreToHtmlResponse(indexResponse);
+                    }
                     // Pass settings to avoid double fetch
                     const disguiseResponse = await handleDisguiseRequest(context, settings);
                     if (disguiseResponse) {
